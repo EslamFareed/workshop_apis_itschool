@@ -35,17 +35,121 @@ class _SearchScreenState extends State<SearchScreen> {
       for (var element in response.data) {
         products.add(ProductModel.fromJson(element));
       }
+      max = products[0].price!.toDouble();
+      min = products[0].price!.toDouble();
+      for (var item in products) {
+        if (item.price! > max) {
+          max = item.price!.toDouble();
+        }
+
+        if (item.price! < min) {
+          min = item.price!.toDouble();
+        }
+      }
+
+      start = min;
+      end = min + 10.0;
+
       setState(() {
         isLoading = false;
       });
     });
   }
 
+  void _searchByPrice() {
+    products = [];
+    setState(() {
+      isLoading = true;
+    });
+    DioHelper.dio.get("$getProductsByNameApiUrl${searchController.text}",
+        queryParameters: {
+          "price_min": start,
+          "price_max": end,
+        }).then((response) {
+      for (var element in response.data) {
+        products.add(ProductModel.fromJson(element));
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  double start = 0;
+  double end = 0;
+
+  double max = 0;
+  double min = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Search"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return BottomSheet(
+                    onClosing: () {},
+                    builder: (context) {
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return SizedBox(
+                            height: 400,
+                            child: Column(
+                              children: [
+                                RangeSlider(
+                                  divisions: 1000,
+                                  values: RangeValues(start, end),
+                                  min: min,
+                                  max: max,
+                                  labels: const RangeLabels(
+                                    "Min Price",
+                                    "Max Price",
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      start = value.start;
+                                      end = value.end;
+                                    });
+                                  },
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("${start.toInt()}"),
+                                      Text("${end.toInt()}"),
+                                    ],
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _searchByPrice();
+                                  },
+                                  child: const Text("Filter By Price"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.filter_list),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

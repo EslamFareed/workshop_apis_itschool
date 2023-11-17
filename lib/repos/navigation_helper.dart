@@ -17,6 +17,16 @@ abstract class NavigationHelper {
         ));
   }
 
+  static goToAndOffAll(Widget screen, BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => screen,
+      ),
+      (route) => false,
+    );
+  }
+
   static showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));

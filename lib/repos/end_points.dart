@@ -7,3 +7,7 @@ const getProductsInCategoryApiUrl =
 
 const getProductsByNameApiUrl =
     "https://api.escuelajs.co/api/v1/products/?title=";
+
+const getProductsByPriceApiUrl = "https://api.escuelajs.co/api/v1/products";
+
+const getProfileApiUrl = "https://api.escuelajs.co/api/v1/auth/profile";

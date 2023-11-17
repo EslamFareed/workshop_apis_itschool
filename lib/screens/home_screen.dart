@@ -5,8 +5,11 @@ import 'package:workshop_apis_itschool/models/product_model.dart';
 import 'package:workshop_apis_itschool/repos/dio_helper.dart';
 import 'package:workshop_apis_itschool/repos/end_points.dart';
 import 'package:workshop_apis_itschool/repos/navigation_helper.dart';
+import 'package:workshop_apis_itschool/repos/shared_helper.dart';
+import 'package:workshop_apis_itschool/screens/login_screen.dart';
 import 'package:workshop_apis_itschool/screens/product_details.dart';
 import 'package:workshop_apis_itschool/screens/products_in_category_screen.dart';
+import 'package:workshop_apis_itschool/screens/profile_screen.dart';
 import 'package:workshop_apis_itschool/screens/search_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,8 +36,19 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.search),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              NavigationHelper.goTo(ProfileScreen(), context);
+            },
             icon: const Icon(Icons.person),
+          ),
+          IconButton(
+            onPressed: () async {
+              await SharedHelper.prefs.setBool("isLogin", false);
+              await SharedHelper.prefs.remove("access_token").then((value) {
+                NavigationHelper.goToAndOffAll(LoginScreen(), context);
+              });
+            },
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),

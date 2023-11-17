@@ -34,7 +34,9 @@ class MyApp extends StatelessWidget {
 //! Tap Category Show Products inside this Category
 //! Tap Any Product Open Details For This Product
 //! Search by product name
+//! Filter ( With Price )
+//! Get Profile
+//! Logout
 
-//? Next Time And Filter ( With Price )
-//? Next Time Get Profile
-//? Next Time Logout
+//! State Management
+//! Cubit
